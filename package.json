@@ -1,0 +1,17 @@
+{
+  "name": "cozy-alir",
+  "version": "0.0.0",
+  "description": "CozyCloud wrapper for Àlir Web application",
+  "main": "server.js",
+  "dependencies": {
+    "alir": "0.0.0",
+    "express": "^4.10.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Clochix",
+  "license": "GPLv3"
+}
