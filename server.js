@@ -2,7 +2,9 @@
 var express    = require('express'),
     http       = require('http'),
     httpProxy  = require('http-proxy'),
-    cors       = require('cors');
+    cors       = require('cors'),
+    bodyParser = require('body-parser'),
+    activity   = require('./lib/activity');
 process.on('uncaughtException', function (err) {
   "use strict";
   console.error("Uncaught Exception");
@@ -11,6 +13,7 @@ process.on('uncaughtException', function (err) {
 });
 
 var app = express();
+app.use(bodyParser.json());
 var port = process.env.PORT || 9250;
 var host = process.env.HOST || "127.0.0.1";
 
@@ -29,15 +32,28 @@ app.get('/js/default.js', function (req, res) {
 // Serve static content
 app.use(express.static(__dirname + '/node_modules/alir'));
 
-var proxy = httpProxy.createProxyServer();
-proxy.on('proxyReq', function(proxyReq, req, res, options) {
+// CORS proxy
+(function () {
   "use strict";
-  proxyReq.path = 'http://' + req.params[0];
-});
-app.get('/proxy/*', cors(), function (req, res) {
+  var proxy = httpProxy.createProxyServer();
+  proxy.on('proxyReq', function(proxyReq, req, res, options) {
+    proxyReq.path = 'http://' + req.params[0];
+  });
+  var proxyRequest = function (req, res) {
+    proxy.web(req, res, { target: 'http://' + req.params[0] });
+  };
+  app.get('/proxy/*', cors(), proxyRequest);
+}());
+
+// Web Activities
+(function () {
   "use strict";
-  proxy.web(req, res, { target: 'http://' + req.params[0] });
-});
+  var handleActivity = function (req, res) {
+    activity.handleActivity(req.body, res);
+  };
+  app.post('/activity', handleActivity);
+  app.post('/apps/alir/activity', handleActivity);
+}());
 
 // Starts the server itself
 http.createServer(app).listen(port, host, function() {

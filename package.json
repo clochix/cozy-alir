@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "alir": "0.0.0",
+    "body-parser": "^1.9.2",
     "cors": "^2.5.1",
     "express": "^4.10.1",
     "http-proxy": "^1.6.1"
