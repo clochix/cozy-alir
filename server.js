@@ -10,9 +10,26 @@ process.on('uncaughtException', function (err) {
   console.error(err.stack);
 });
 
-var proxy = httpProxy.createProxyServer();
 var app = express();
+var port = process.env.PORT || 9250;
+var host = process.env.HOST || "127.0.0.1";
+
+// Override default app configuration
+app.get('/js/default.js', function (req, res) {
+  "use strict";
+  var config =
+    'var defaultConfig = {\n' +
+    '  corsproxy: window.location.protocol + "//" + window.location.host + "/apps/alir/proxy/",\n' +
+    '  remoteActivity: true\n' +
+    '};\n';
+  res.setHeader('Content-Type', 'text/javascript');
+  res.send(config);
+});
+
+// Serve static content
 app.use(express.static(__dirname + '/node_modules/alir'));
+
+var proxy = httpProxy.createProxyServer();
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
   "use strict";
   proxyReq.path = 'http://' + req.params[0];
@@ -21,8 +38,6 @@ app.get('/proxy/*', cors(), function (req, res) {
   "use strict";
   proxy.web(req, res, { target: 'http://' + req.params[0] });
 });
-var port = process.env.PORT || 9250;
-var host = process.env.HOST || "127.0.0.1";
 
 // Starts the server itself
 http.createServer(app).listen(port, host, function() {
