@@ -23,6 +23,7 @@ app.get('/js/default.js', function (req, res) {
   var config =
     'var defaultConfig = {\n' +
     '  corsproxy: window.location.protocol + "//" + window.location.host + "/apps/alir/proxy/",\n' +
+    '  rsLogin: "me@" + window.location.host,\n' +
     '  remoteActivity: true\n' +
     '};\n';
   res.setHeader('Content-Type', 'text/javascript');
