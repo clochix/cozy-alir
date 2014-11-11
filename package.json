@@ -4,7 +4,7 @@
   "description": "CozyCloud wrapper for Àlir Web application",
   "main": "server.js",
   "dependencies": {
-    "alir": "0.0.0",
+    "alir": ">= 0.0.1",
     "body-parser": "^1.9.2",
     "cors": "^2.5.1",
     "express": "^4.10.1",
