@@ -1,6 +1,6 @@
 {
   "name": "cozy-alir",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "CozyCloud wrapper for Àlir Web application",
   "main": "server.js",
   "dependencies": {
@@ -16,5 +16,6 @@
     "start": "node server.js"
   },
   "author": "Clochix",
-  "license": "GPLv3"
+  "license": "GPLv3",
+  "icon-path": "alir.png"
 }
