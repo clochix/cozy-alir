@@ -1,10 +1,11 @@
 {
   "name": "cozy-alir",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "CozyCloud wrapper for Àlir Web application",
   "main": "server.js",
   "dependencies": {
-    "alir": ">= 0.0.1",
+    "acthesis": "^0.1.0",
+    "alir": ">= 0.0.3",
     "body-parser": "^1.9.2",
     "cors": "^2.5.1",
     "express": "^4.10.1",
@@ -13,7 +14,12 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "cat ./node_modules/acthesis/node_modules/engine.io-client/engine.io.js node_modules/acthesis/lib/activity-client.js config.js > public/public.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clochix/cozy-alir.git"
   },
   "author": "Clochix",
   "license": "GPLv3",

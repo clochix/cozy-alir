@@ -4,7 +4,7 @@ var express    = require('express'),
     httpProxy  = require('http-proxy'),
     cors       = require('cors'),
     bodyParser = require('body-parser'),
-    activity   = require('./lib/activity');
+    acthesis   = require('acthesis');
 process.on('uncaughtException', function (err) {
   "use strict";
   console.error("Uncaught Exception");
@@ -20,14 +20,8 @@ var host = process.env.HOST || "127.0.0.1";
 // Override default app configuration
 app.get('/js/default.js', function (req, res) {
   "use strict";
-  var config =
-    'var defaultConfig = {\n' +
-    '  corsproxy: window.location.protocol + "//" + window.location.host + "/apps/alir/proxy/",\n' +
-    '  rsLogin: "me@" + window.location.host,\n' +
-    '  remoteActivity: true\n' +
-    '};\n';
   res.setHeader('Content-Type', 'text/javascript');
-  res.send(config);
+  res.sendFile('public.js', {root: __dirname + '/public/'});
 });
 
 // Serve static content
@@ -46,19 +40,11 @@ app.use(express.static(__dirname + '/node_modules/alir'));
   app.get('/proxy/*', cors(), proxyRequest);
 }());
 
-// Web Activities
-(function () {
-  "use strict";
-  var handleActivity = function (req, res) {
-    activity.handleActivity(req.body, res);
-  };
-  app.post('/activity', handleActivity);
-  app.post('/apps/alir/activity', handleActivity);
-}());
-
 // Starts the server itself
-http.createServer(app).listen(port, host, function() {
+var server = http.createServer(app).listen(port, host, function() {
   "use strict";
   console.log("Server listening to %s:%d within %s environment", host, port, app.get('env'));
 });
 
+// Web activities
+app.use(acthesis({httpServer: server}));
