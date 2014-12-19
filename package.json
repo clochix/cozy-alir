@@ -15,7 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "postinstall": "cat ./node_modules/acthesis/node_modules/engine.io-client/engine.io.js node_modules/acthesis/lib/activity-client.js config.js > public/public.js"
+    "postinstall": "mkdir -p public && cat node_modules/acthesis/node_modules/engine.io-client/engine.io.js node_modules/acthesis/lib/activity-client.js config.js > public/public.js"
   },
   "repository": {
     "type": "git",
