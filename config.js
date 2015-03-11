@@ -5,17 +5,18 @@ window.defaultConfig = {
   rsLogin: "me@" + window.location.host,
   remoteActivity: true
 };
+var manifest, options;
 
 // Init Activity polifill
 if (typeof window.MozActivity === 'undefined') {
-  var manifest = {
+  manifest = {
     "activities": {
       "save-bookmark": {
         "filters": {
           "type": "url",
           "url": {
             "required": true,
-            "regexp":"/^https?:/"
+            "regexp": "/^https?:/"
           }
         },
         "disposition": "inline",
@@ -32,8 +33,13 @@ if (typeof window.MozActivity === 'undefined') {
       }
     }
   };
-  var options = {
+  options = {
     postMethod: "socket"
   };
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    options.server = 'http://localhost:9250';
+  } else {
+    options.server =  window.location.protocol + "//" + window.location.hostname + "/apps/acthesis";
+  }
   new Acthesis(options, manifest);
 }

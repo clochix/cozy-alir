@@ -37,7 +37,7 @@ app.use(express.static(__dirname + '/node_modules/alir'));
   var proxyRequest = function (req, res) {
     proxy.web(req, res, { target: 'http://' + req.params[0] });
   };
-  app.get('/proxy/*', cors(), proxyRequest);
+  app.get('/apps/alir/proxy/*', cors(), proxyRequest);
 }());
 
 // Starts the server itself
