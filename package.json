@@ -1,11 +1,10 @@
 {
   "name": "cozy-alir",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CozyCloud wrapper for Àlir Web application",
   "main": "server.js",
   "dependencies": {
-    "acthesis": "^0.1.0",
-    "alir": ">= 0.0.3",
+    "alir": ">= 0.0.4",
     "body-parser": "^1.9.2",
     "connect": "^3.3.5",
     "cors": "^2.5.1",
@@ -16,7 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "postinstall": "mkdir -p public && cat node_modules/acthesis/lib/activity-client.js config.js > public/public.js"
+    "postinstall": "cat public/activity-client.js config.js > public/public.js"
   },
   "repository": {
     "type": "git",

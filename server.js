@@ -4,7 +4,6 @@ var connect     = require('connect'),
     httpProxy   = require('http-proxy'),
     cors        = require('cors'),
     bodyParser  = require('body-parser'),
-    acthesis    = require('acthesis'),
     path        = require('path'),
     serveStatic = require('serve-static'),
     fs          = require('fs'),
@@ -37,7 +36,6 @@ app.use('/js/default.js', function (req, res) {
     proxyReq.path = 'http://' + req.url.substr(1);
   });
   proxyRequest = function (req, res) {
-    console.log("proxy", req.url.substr(1));
     proxy.web(req, res, { target: 'http://' + req.url.substr(1) });
   };
   app.use('/proxy/', cors());
@@ -53,5 +51,3 @@ server = http.createServer(app).listen(port, host, function () {
   console.log("Server listening to %s:%d", host, port);
 });
 
-// Web activities
-app.use(acthesis({httpServer: server}));
