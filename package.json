@@ -7,9 +7,10 @@
     "acthesis": "^0.1.0",
     "alir": ">= 0.0.3",
     "body-parser": "^1.9.2",
+    "connect": "^3.3.5",
     "cors": "^2.5.1",
-    "express": "^4.10.1",
-    "http-proxy": "^1.6.1"
+    "http-proxy": "^1.6.1",
+    "serve-static": "^1.9.2"
   },
   "devDependencies": {},
   "scripts": {

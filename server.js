@@ -1,10 +1,14 @@
 //jshint node: true
-var express    = require('express'),
-    http       = require('http'),
-    httpProxy  = require('http-proxy'),
-    cors       = require('cors'),
-    bodyParser = require('body-parser'),
-    acthesis   = require('acthesis');
+var connect     = require('connect'),
+    http        = require('http'),
+    httpProxy   = require('http-proxy'),
+    cors        = require('cors'),
+    bodyParser  = require('body-parser'),
+    acthesis    = require('acthesis'),
+    path        = require('path'),
+    serveStatic = require('serve-static'),
+    fs          = require('fs'),
+    app, port, host, server;
 process.on('uncaughtException', function (err) {
   "use strict";
   console.error("Uncaught Exception");
@@ -12,38 +16,41 @@ process.on('uncaughtException', function (err) {
   console.error(err.stack);
 });
 
-var app = express();
+app = connect();
 app.use(bodyParser.json());
-var port = process.env.PORT || 9250;
-var host = process.env.HOST || "127.0.0.1";
+port = process.env.PORT || 9252;
+host = process.env.HOST || "127.0.0.1";
 
 // Override default app configuration
-app.get('/js/default.js', function (req, res) {
+app.use('/js/default.js', function (req, res) {
   "use strict";
   res.setHeader('Content-Type', 'text/javascript');
-  res.sendFile('public.js', {root: __dirname + '/public/'});
+  fs.createReadStream(path.join(__dirname, '/public/public.js')).pipe(res);
 });
-
-// Serve static content
-app.use(express.static(__dirname + '/node_modules/alir'));
 
 // CORS proxy
 (function () {
   "use strict";
-  var proxy = httpProxy.createProxyServer();
-  proxy.on('proxyReq', function(proxyReq, req, res, options) {
-    proxyReq.path = 'http://' + req.params[0];
+  var proxy, proxyRequest;
+  proxy = httpProxy.createProxyServer();
+  proxy.on('proxyReq', function (proxyReq, req, res, options) {
+    proxyReq.path = 'http://' + req.url.substr(1);
   });
-  var proxyRequest = function (req, res) {
-    proxy.web(req, res, { target: 'http://' + req.params[0] });
+  proxyRequest = function (req, res) {
+    console.log("proxy", req.url.substr(1));
+    proxy.web(req, res, { target: 'http://' + req.url.substr(1) });
   };
-  app.get('/apps/alir/proxy/*', cors(), proxyRequest);
+  app.use('/proxy/', cors());
+  app.use('/proxy/', proxyRequest);
 }());
 
+// Serve static content
+app.use(serveStatic(path.join(__dirname, '/node_modules/alir')));
+
 // Starts the server itself
-var server = http.createServer(app).listen(port, host, function() {
+server = http.createServer(app).listen(port, host, function () {
   "use strict";
-  console.log("Server listening to %s:%d within %s environment", host, port, app.get('env'));
+  console.log("Server listening to %s:%d", host, port);
 });
 
 // Web activities
