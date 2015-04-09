@@ -8,6 +8,7 @@
     "body-parser": "^1.9.2",
     "connect": "^3.3.5",
     "cors": "^2.5.1",
+    "escape-html": "^1.0.1",
     "http-proxy": "^1.6.1",
     "serve-static": "^1.9.2"
   },
